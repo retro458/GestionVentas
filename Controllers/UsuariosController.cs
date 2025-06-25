@@ -59,12 +59,24 @@ namespace GestionVentas.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("NombreEmpleado,Usuario,Contra,RolID,Estado")] Usuarios usuarios)
         {
+            if (!ModelState.IsValid)
+            {
+                foreach (var entry in ModelState)
+                {
+                    foreach (var error in entry.Value.Errors)
+                    {
+                        Console.WriteLine($"Campo: {entry.Key}, Error: {error.ErrorMessage}");
+                    }
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(usuarios);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["RolID"] = new SelectList(_context.Roles, "RolID", "RolID", usuarios.RolID);
             return View(usuarios);
         }

@@ -12,7 +12,7 @@ namespace GestionVentas.Models
         public bool Estado  { get; set; }
         public int RolID { get; set; }
 
-        public Rol Roles { get; set; }
+        public Rol? Roles { get; set; }
 
     }
 }
