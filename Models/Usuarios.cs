@@ -9,8 +9,8 @@ namespace GestionVentas.Models
         public string NombreEmpleado { get; set; } 
         public string Usuario { get; set; }
         public string Contra { get; set; }
+        public bool Estado  { get; set; }
         public int RolID { get; set; }
-        public bool Estado { get; set; }
 
         public Rol Roles { get; set; }
 

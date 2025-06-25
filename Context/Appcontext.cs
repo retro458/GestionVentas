@@ -16,6 +16,11 @@ namespace GestionVentas.Context
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(Appcontext).Assembly);
             base.OnModelCreating(modelBuilder);
+            // Configure the Usuarios entity
+            // Define the primary key for the Usuarios entity
+            modelBuilder.Entity<Usuarios>()
+                .HasKey(u => u.UsuarioID);
+
         }
     }
     
