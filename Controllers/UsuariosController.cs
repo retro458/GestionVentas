@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GestionVentas.Context;
 using GestionVentas.Models;
+using BCrypt.Net;
 
 namespace GestionVentas.Controllers
 {
@@ -22,8 +23,10 @@ namespace GestionVentas.Controllers
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
-            var appcontext = _context.Usuarios.Include(u => u.Roles);
-            return View(await appcontext.ToListAsync());
+            var usuarios = _context.Usuarios.Include(u => u.Roles).Where(u => u.Estado == true);
+
+            return View(await usuarios.ToListAsync());
+
         }
 
         // GET: Usuarios/Details/5
@@ -72,6 +75,8 @@ namespace GestionVentas.Controllers
 
             if (ModelState.IsValid)
             {
+                usuarios.Contra = BCrypt.Net.BCrypt.HashPassword(usuarios.Contra);
+
                 _context.Add(usuarios);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -161,7 +166,8 @@ namespace GestionVentas.Controllers
             var usuarios = await _context.Usuarios.FindAsync(id);
             if (usuarios != null)
             {
-                _context.Usuarios.Remove(usuarios);
+             usuarios.Estado = false; // establecer estado en falso para desactivar al usuario
+                _context.Update(usuarios);
             }
 
             await _context.SaveChangesAsync();

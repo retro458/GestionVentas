@@ -25,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Contra" class="control-label"></label>
-                <input asp-for="Contra" class="form-control" />
+                <input asp-for="Contra" type="password" class="form-control" />
                 <span asp-validation-for="Contra" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -33,11 +33,7 @@
                 <select asp-for="RolID" class="form-control" asp-items="ViewBag.RolID"></select>
                 <span asp-validation-for="RolID" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
-                </label>
-            </div>
+         
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

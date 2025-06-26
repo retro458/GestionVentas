@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Generar Factura";
+}
+
+<h2>Generar Factura</h2>
+
+<form asp-action="FirmarFactura" method="post">
+    <button type="submit" class="btn btn-primary">Generar Factura</button>
+</form>
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["mensaje"]</div>
+}
