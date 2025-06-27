@@ -4,17 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestionVentas.Context
 {
-    public class Appcontext :DbContext
+    public class AppDbcontext :DbContext
     {
-        public Appcontext(DbContextOptions<Appcontext> options) : base(options)
+        public AppDbcontext(DbContextOptions<AppDbcontext> options) : base(options)
         {
         }
         public DbSet<Usuarios> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
-       
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Empresa> Empresas { get; set; }
+        public DbSet<Producto> Producto { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(Appcontext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbcontext).Assembly);
             base.OnModelCreating(modelBuilder);
             // Configure the Usuarios entity
             // Define the primary key for the Usuarios entity

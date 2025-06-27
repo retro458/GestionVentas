@@ -12,3 +12,13 @@
 {
     <div class="alert alert-success">@TempData["mensaje"]</div>
 }
+
+@if (TempData["jsonFactura"] != null)
+{
+    <h4>Factura Generada (JSON):</h4>
+    <pre>@TempData["jsonFactura"]</pre>
+
+    <form asp-action="EnviarAFakeHacienda" method="post">
+        <button type="submit" class="btn btn-success">Enviar a Hacienda</button>
+    </form>
+}

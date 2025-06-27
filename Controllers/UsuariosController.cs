@@ -13,9 +13,9 @@ namespace GestionVentas.Controllers
 {
     public class UsuariosController : Controller
     {
-        private readonly Appcontext _context;
+        private readonly AppDbcontext _context;
 
-        public UsuariosController(Appcontext context)
+        public UsuariosController(AppDbcontext context)
         {
             _context = context;
         }
