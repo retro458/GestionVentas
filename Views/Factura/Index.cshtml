@@ -22,3 +22,8 @@
         <button type="submit" class="btn btn-success">Enviar a Hacienda</button>
     </form>
 }
+@if (TempData["MensajeHistorial"] != null)
+{
+	<div class="alert alert-info">@TempData["mensajeHistorial"]</div>
+}
+

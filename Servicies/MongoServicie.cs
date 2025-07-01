@@ -16,7 +16,9 @@ namespace GestionVentas.Servicies
 
         public IMongoCollection<FacturaJson> FacturasFirmadas =>
             _database.GetCollection<FacturaJson>("FacturasFirmadas");
-
+            
+        public IMongoCollection<FacturaJson> FacturasAceptadas =>
+            _database.GetCollection<FacturaJson>("FacturasAceptadas");
 
 
 

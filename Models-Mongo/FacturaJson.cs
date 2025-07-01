@@ -6,6 +6,8 @@ namespace GestionVentas.Models_Mongo
     {
         [BsonId]
         public ObjectId Id { get; set; }
+        [BsonIgnoreIfNull]
+        public int? FacturaSQLID { get; set; } // ID de la factura en SQL Server, si existe
         public string Emisor { get; set; }
         public string Cliente { get; set; }
         public DateTime FechaEmision { get; set; }

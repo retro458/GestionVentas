@@ -14,6 +14,8 @@ namespace GestionVentas.Context
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Producto> Producto { get; set; }
+        public DbSet<Factura> Factura { get; set; }
+        public DbSet<HistorialFactura> HistorialFacturas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,8 +26,11 @@ namespace GestionVentas.Context
             modelBuilder.Entity<Usuarios>()
                 .HasKey(u => u.UsuarioID);
 
+            //define la llave primaria de historial factura
+            modelBuilder.Entity<HistorialFactura>()
+                .HasKey(hf => hf.HistoriaFacturasID);
         }
     }
-    
-    }
+
+}
 

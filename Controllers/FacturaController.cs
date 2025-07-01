@@ -56,6 +56,22 @@ namespace GestionVentas.Controllers
 
             }
 
+         
+            // guardar la factura en la base de datos SQL 
+            var nuevaFactura = new Models.Factura
+            {
+                ClienteID = cliente.ClienteID,
+                EmpresaID = empresa.EmpresaID,
+                Fecha = factura.FechaEmision,
+                Total = factura.Total,
+                Estado = "Firmada",
+                Firmahash = factura.Firma
+            };
+            _context.Factura.Add(nuevaFactura);
+            _context.SaveChanges();
+            // Asignar el id sql a la factura de mongo
+            factura.FacturaSQLID = nuevaFactura.FacturaID;
+            TempData["FacturaSQLID"] = nuevaFactura.FacturaID;
             // Guardar la factura en MongoDB
             factura.Estado = "Firmada"; // Estado de la factura
             _mongoService.FacturasFirmadas.InsertOne(factura);
@@ -81,22 +97,63 @@ namespace GestionVentas.Controllers
         public async Task<IActionResult> EnviarAFakeHacienda()
         {
 
-            var factura = _mongoService.FacturasFirmadas.Find(f => f.Estado == "Firmada").FirstOrDefault();
-
-            if (factura == null)
+            if (TempData["FacturaSQLID"] == null)
             {
-              TempData["Mensaje"] = "No hay facturas firmadas para enviar a Hacienda.";
+                TempData["Mensaje"] = "No se encontro el ID de la facutra para enviar.";
                 return RedirectToAction("Index");
             }
 
-            using var client = new HttpClient();
+            int facturaId = Convert.ToInt32(TempData["FacturaSQLID"]);
+            var factura = _mongoService.FacturasFirmadas
+                .Find(f => f.FacturaSQLID == facturaId)
+                .FirstOrDefault();
+            if (factura == null)
+            {
+                TempData["Mensaje"] = "No se encontro la factura firmada correspondiente.";
+                return RedirectToAction("Index");
+            }
+
+                using var client = new HttpClient();
             var response = await client.PostAsJsonAsync("https://localhost:7013/api/Hacienda/EnviarFactura", factura);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<dynamic>();
                 factura.Estado = "Enviada"; // Actualizar el estado de la factura
-                await _mongoService.FacturasFirmadas.ReplaceOneAsync(f => f.Id == factura.Id, factura);
+                // Actualizar la factura con el resultado de Hacienda para mongo
+                var facturaClon = new FacturaJson
+                {
+                    Emisor = factura.Emisor,
+                    Cliente = factura.Cliente,
+                    FechaEmision = factura.FechaEmision,
+                    Detalles = factura.Detalles,
+                    Total = factura.Total,
+                    Firma = factura.Firma, // Asignar la firma recibida de Hacienda
+                    Estado = factura.Estado,
+                    FacturaSQLID = factura.FacturaSQLID // Mantener el ID de SQL si existe
+                };
+
+                // Guardar la factura actualizada en MongoDB
+                await _mongoService.FacturasAceptadas.InsertOneAsync(facturaClon);
+                //guardar en historial de facturas en sql
+                if(factura.FacturaSQLID.HasValue)
+                {
+                    _context.HistorialFacturas.Add(new Models.HistorialFactura
+                    {
+                        FacturaID = factura.FacturaSQLID.Value,
+                        FechaMovimiento = DateTime.Now,
+                        EstadoAnterior = "Firmada",
+                        EstadoNuevo = "Aceptada",
+                        UsuarioID = 1
+                    });
+                    TempData["MensajeHistorial"] = "Factura guardada en historial de facturas.";
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    TempData["MensajeHistorial"] = "Factura no tiene ID de SQL para guardar en historial.";
+                }
                 TempData["Mensaje"] = $"Factura enviada a Hacienda";
+
             }
             else
             {
