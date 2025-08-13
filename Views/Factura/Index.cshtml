@@ -1,4 +1,5 @@
-﻿@{
+﻿@model GestionVentas.ViewsModels.IndexViewModel
+@{
     ViewData["Title"] = "Generar Factura";
 }
 
@@ -21,6 +22,12 @@
     <form asp-action="EnviarAFakeHacienda" method="post">
         <button type="submit" class="btn btn-success">Enviar a Hacienda</button>
     </form>
+}
+@if (Model.MostrarBoton)
+{
+<form asp-action="GenerarYEnviarPdf" method="post">
+    <button type="submit" class="btn btn-secondary">Generar PDF y Enviar</button>
+</form>
 }
 @if (TempData["MensajeHistorial"] != null)
 {

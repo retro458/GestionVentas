@@ -9,6 +9,9 @@
         public string Giro { get; set; }
         public string Direccion { get; set; }
         public string Telefono { get; set; }
+        public int ActividaEconomica { get; set; }
+        public string Departamento { get; set; }
+        public string Municipio { get; set; }
         public bool Estado { get; set; } 
 
     }

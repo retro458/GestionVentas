@@ -1,8 +1,51 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Bienvenido";
+    var nombreEmpleado = Context.Session.GetString("NombreEmpleado") ?? "Usuario";
+    var rol = Context.Session.GetString("Rol") ?? "Sin Rol";
+    var permisos = (Context.Session.GetString("Permisos") ?? "").Split(",", StringSplitOptions.RemoveEmptyEntries);
 }
+    <style >
+    body {
+        background: #f4f7fc;
+    }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    .card {
+        background: white;
+        border-radius: 16px;
+        transition: 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+        }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-4 p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="mb-3">¡Bienvenido, <strong>@nombreEmpleado</strong>!</h2>
+                        <p class="lead">Rol asignado: <strong>@rol</strong></p>
+                        <p class="mb-2">Tienes acceso a los siguientes módulos:</p>
+                        @if (permisos.Length > 0)
+                        {
+                            <div class="mb-3">
+                                @foreach (var permiso in permisos)
+                                {
+                                    <span class="badge bg-primary me-1">@permiso</span>
+                                }
+                            </div>
+                        }
+                        <a href="/login/Login" class="btn btn-outline-danger mt-2">Cerrar Sesión</a>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" alt="Bienvenida" class="img-fluid" style="max-height: 150px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

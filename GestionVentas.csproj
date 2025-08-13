@@ -18,6 +18,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
     <PackageReference Include="MongoDB.Driver.Core" Version="2.30.0" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\trabajo-en-equipo-grupo-figurativo-de-equipo-de-trabajo.jpg" />
   </ItemGroup>
 
 </Project>

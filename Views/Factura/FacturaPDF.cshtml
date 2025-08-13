@@ -1,0 +1,120 @@
+﻿@model GestionVentas.Models_Mongo.FacturaJson
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Factura</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .info {
+            margin-bottom: 20px;
+        }
+
+            .info p {
+                margin: 4px 0;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #333;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total {
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<h1 style="text-align:center;">Factura Electrónica</h1>
+
+<h3>Identificación</h3>
+<p><strong>Versión:</strong> @Model.Identificacion.Version</p>
+<p><strong>Ambiente:</strong> @Model.Identificacion.Ambiente</p>
+<p><strong>Tipo DTE:</strong> @Model.Identificacion.TipoDte</p>
+<p><strong>N° Control:</strong> @Model.Identificacion.NumeroControl</p>
+<p><strong>Fecha de Emisión:</strong> @Model.Identificacion.FechaHoraEmision.ToString("dd/MM/yyyy HH:mm")</p>
+<p><strong>Moneda:</strong> @Model.Identificacion.TipoMoneda</p>
+
+<hr />
+
+<h3>Datos del Emisor</h3>
+<p><strong>NIT:</strong> @Model.Emisor.NIT</p>
+<p><strong>Nombre:</strong> @Model.Emisor.Nombre</p>
+<p><strong>Comercial:</strong> @Model.Emisor.NombreComercial</p>
+<p><strong>Actividad:</strong> @Model.Emisor.ActividadEconomica</p>
+<p><strong>Dirección:</strong> @Model.Emisor.Direccion, @Model.Emisor.Municipio, @Model.Emisor.Departamento</p>
+
+<hr />
+
+<h3>Datos del Receptor</h3>
+<p><strong>NIT:</strong> @Model.Receptor.NIT</p>
+<p><strong>Nombre:</strong> @Model.Receptor.Nombre</p>
+<p><strong>Dirección:</strong> @Model.Receptor.Direccion, @Model.Receptor.Municipio, @Model.Receptor.Departamento</p>
+
+<hr />
+
+<h3>Detalle de Productos</h3>
+<table style="width:100%; border-collapse:collapse;" border="1">
+    <thead>
+        <tr>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Gravado</th>
+            <th>Exento</th>
+            <th>No sujeto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CuerpoDocumento)
+        {
+            <tr>
+                <td>@item.Descripcion</td>
+                <td>@item.Cantidad</td>
+                <td>$@item.PrecioUnitario</td>
+                <td>$@item.VentasGravadas</td>
+                <td>$@item.VentasExentas</td>
+                <td>$@item.VentasNoSujetas</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<h3>Resumen</h3>
+<p><strong>Total Gravado:</strong> $@Model.Resumen.TotalGravada</p>
+<p><strong>Total Exento:</strong> $@Model.Resumen.TotalExenta</p>
+<p><strong>Total No Sujeto:</strong> $@Model.Resumen.TotalNoSuj</p>
+<p><strong>Subtotal:</strong> $@Model.Resumen.SubTotalVentas</p>
+<p><strong>IVA:</strong> $@Model.Resumen.IVA</p>
+<p><strong>Total a Pagar:</strong> <strong>$@Model.Resumen.TotalPagar</strong></p>
+
+<hr />
+
+<h4>Información del Responsable</h4>
+<p><strong>Responsable:</strong> @Model.Extensiones.NombreResponsable</p>
+<p><strong>Correo:</strong> @Model.Extensiones.CorreoResponsable</p>
+
+<p style="text-align:right; font-size:small; margin-top:50px;">Firma digital: @Model.Firma</p>
+</html>

@@ -1,0 +1,34 @@
+﻿@model GestionVentas.Models.Empresa
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm p-4">
+		<h3 class="mb-4">Detalles de la Empresa</h3>
+    <dl class="row">
+			<dt class="col-sm-3">Nombre de la Empresa</dt>
+			<dd class="col-sm-9">@Model.Nombre</dd>
+			<dt class="col-sm-9">NIT</dt>
+			<dd class="col-sm-3">@Model.NIT</dd>
+			<dt class="col-sm-3">Giro</dt>
+			<dd class="col-sm-9">@Model.Giro</dd>
+			<dt class="col-sm-3">Dirección</dt>
+			<dd class="col-sm-9">@Model.Direccion</dd>
+			<dt class="col-sm-3">Teléfono</dt>
+			<dd class="col-sm-9">@Model.Telefono</dd>
+			<dt class="col-sm-3">Estado</dt>
+			<dd class="col-sm-9">@((Model.Estado) ? "Activo" : "Inactivo")</dd>
+			<dt class="col-sm-3">Actividad Economica</dt>
+			<dt class="col-sm-9">@Model.ActividaEconomica</dt>
+			<dt class="col-sm-3">Departamento</dt>
+			<dd class="col-sm-9">@Model.Departamento</dd>
+			<dt class="col-sm-3">Municipio</dt>
+			<dd class="col-sm-9">@Model.Municipio</dd>
+		</dl>
+</div>
+<div class="d-flex justify-content-between">
+    <a asp-action="Edit" asp-route-id="@Model.EmpresaID" class="btn btn-primary">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+</div>

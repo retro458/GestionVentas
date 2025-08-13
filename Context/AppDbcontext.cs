@@ -16,7 +16,7 @@ namespace GestionVentas.Context
         public DbSet<Producto> Producto { get; set; }
         public DbSet<Factura> Factura { get; set; }
         public DbSet<HistorialFactura> HistorialFacturas { get; set; }
-
+        public DbSet<LoginIntento> LoginIntentos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbcontext).Assembly);

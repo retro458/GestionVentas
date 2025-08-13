@@ -51,7 +51,7 @@ namespace GestionVentas.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            ViewData["RolID"] = new SelectList(_context.Roles, "RolID", "RolID");
+            ViewData["RolID"] = new SelectList(_context.Roles, "RolID", "NombreRol");
             return View();
         }
 
@@ -99,7 +99,7 @@ namespace GestionVentas.Controllers
             {
                 return NotFound();
             }
-            ViewData["RolID"] = new SelectList(_context.Roles, "RolID", "RolID", usuarios.RolID);
+            ViewData["RolID"] = new SelectList(_context.Roles, "RolID", "NombreRol", usuarios.RolID);
             return View(usuarios);
         }
 
@@ -108,7 +108,7 @@ namespace GestionVentas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("NombreEmpleado,Usuario,Contra,RolID,Estado")] Usuarios usuarios)
+        public async Task<IActionResult> Edit(int id, [Bind("UsuarioID,NombreEmpleado,Usuario,Contra,RolID,Estado")] Usuarios usuarios)
         {
             if (id != usuarios.UsuarioID)
             {
@@ -119,8 +119,14 @@ namespace GestionVentas.Controllers
             {
                 try
                 {
-                    _context.Update(usuarios);
-                    await _context.SaveChangesAsync();
+                    if (ModelState.IsValid)
+                    {
+                        usuarios.Contra = BCrypt.Net.BCrypt.HashPassword(usuarios.Contra);
+
+                        _context.Update(usuarios);
+                        await _context.SaveChangesAsync();
+                    }
+                   
                 }
                 catch (DbUpdateConcurrencyException)
                 {

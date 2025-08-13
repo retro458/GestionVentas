@@ -1,0 +1,73 @@
+﻿@using GestionVentas.Controllers
+@using GestionVentas.ViewsModels
+@model SeleccionViewModel
+@{
+    ViewData["Title"] = "Seleccionar Empresa y Cliente";
+}
+@{
+    Layout = "~/Views/Shared/_LayoutSeleccion.cshtml";
+}
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#empresa-select').on('change', function () {
+                const empresaId = $(this).val();
+                console.log("Empresa seleccionada:", empresaId); // Debug
+
+                if (empresaId) {
+                    $.get("/Seleccion/ObtenerClientesPorEmpresa", { empresaId: empresaId })
+                        .done(function (data) {
+                            console.log("Clientes recibidos:", data); // Debug
+
+                            const clienteSelect = $("#cliente-select");
+                            clienteSelect.empty();
+                            clienteSelect.append($("<option>").val("").text("Seleccione un cliente"));
+
+                            $.each(data, function (i, cliente) {
+                                clienteSelect.append($("<option>")
+                                    .val(cliente.clienteID)
+                                    .text(cliente.nombre));
+                            });
+                        })
+                        .fail(function (xhr, status, error) {
+                            console.error("Error en la llamada AJAX:", error);
+                        });
+                } else {
+                    $('#cliente-select').empty().append(
+                        $("<option>").val("").text("Seleccione un cliente")
+                    );
+                }
+            });
+        });
+    </script>
+}
+
+
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
+        <h3 class="mb-4 text-center">Selecciona Empresa y Cliente</h3>
+        <form asp-action="GuardarSeleccion" method="post">
+            <div class="mb-3">
+                <label class="form-label">Empresa</label>
+                <select asp-for="EmpresaID" asp-items="Model.Empresas" class="form-control" id="empresa-select">
+                    <option value="">Seleccione una empresa</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Cliente</label>
+
+                <select asp-for="ClienteID" class="form-control" id="cliente-select">
+                    <option value="">Seleccione un cliente</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Continuar</button>
+        </form>
+    </div>
+</div>
+
+

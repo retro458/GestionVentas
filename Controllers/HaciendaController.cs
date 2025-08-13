@@ -21,12 +21,12 @@ namespace GestionVentas.Controllers
             }
 
             //validacions basicas(simulando la validacion de hacienda)
-            if (string.IsNullOrWhiteSpace(factura.Emisor) ||
-               string.IsNullOrWhiteSpace(factura.Cliente) ||
-               factura.FechaEmision == default ||
-               factura.Total <= 0 ||
-               factura.Detalles == null ||
-               factura.Detalles.Count == 0)
+            if (factura.Identificacion == null||
+               factura.Emisor == null ||
+               factura.Receptor == null ||
+               factura.CuerpoDocumento == null || factura.CuerpoDocumento.Count == 0 ||
+               factura.Resumen == null
+               )
             {
                 return BadRequest(new
                 {

@@ -4,18 +4,43 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
 
-<h4>¿Deseás desactivar este usuario?</h4>
-<form asp-action="Delete">
-    <input type="hidden" asp-for="UsuarioID" />
-    <div class="form-group form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" asp-for="Estado" /> Activo
-        </label>
+<div class="container mt-5">
+    <div class="card shadow-sm p-4 text-center">
+        <h3 class="mb-3 text-danger">¿Deseás desactivar este usuario?</h3>
+        <p class="mb-4">El usuario <strong>@Model.NombreEmpleado</strong> pasará a estar inactivo.</p>
+
+        <form id="form-delete" asp-action="Delete">
+            <input type="hidden" asp-for="UsuarioID" />
+
+            <div class="form-check text-center mb-4">
+                <input class="form-check-input me-2" asp-for="Estado" />
+                <label class="form-check-label" asp-for="Estado">Activo</label>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3">
+                <button type="button" class="btn btn-danger" id="btn-confirmar">Confirmar</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
     </div>
-    <button type="submit" class="btn btn-danger">Guardar cambios</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
-    
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById("btn-confirmar").addEventListener("click", function (e) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡El usuario será desactivado!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, desactivar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("form-delete").submit();
+            }
+        });
+    });
+</script>
